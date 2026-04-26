@@ -1,39 +1,46 @@
-dict1 = {'a':3, 'b':5, 'c':100, 'e':10, 'd':16}
-dict2 = {'a':5, 'b':4, 'c':100, 'd':6, 'e':-0}
-dict3 = {'b':1, 'a':0, 'c':100, 'd':7, 'e':0, 'g':9, 'z':11}
+import random
 
-dicts = [dict1, dict2, dict3]
 
-# 1. Собираем все ключи
-all_keys = set().union(dict1, dict2, dict3)
+# 1. создаём список словарей
 
+dicts = []
+dicts_qty = 3
+string = "abc"
+
+for _ in range(dicts_qty):
+    dictionary = {}
+    keys_qty = random.randint(0, len(string))
+    keys = random.sample(string, keys_qty)
+    for key in keys:
+        dictionary[key] = random.randint(0, 1000)
+    dicts.append(dictionary)
+
+# 2. собираем максимум + откуда он
+
+temp_dict = {}
+for i, d in enumerate(dicts, start=1):
+    for k, v in d.items():
+        if k not in temp_dict:
+            temp_dict[k] = (v, i)
+        else:
+            if v > temp_dict[k][0]:
+                temp_dict[k] = (v, i)
+
+# 3. считаем сколько раз встречается ключ
+
+occ = {}
+for d in dicts:
+    for k, _ in d.items():
+        occ[k] = occ.get(k, 0) + 1
+
+# 4. финальный результат
 result = {}
 
-# 2. Для каждого ключа ищем все значения
-for key in all_keys:
-    values = []  # (value, dict_number)
-
-    num = 1
-    for d in dicts:
-        if key in d:
-            values.append((d[key], num))
-        num += 1
-
-    # 3. Если значение лишь одно — пишем без суффикса
-    if len(values) == 1:
-        result[key] = values[0][0]
-
+for key, (value, idx) in temp_dict.items():
+    if occ[key] == 1:
+        result[key] = value
     else:
-        # 4. Ищем максимальное value
-        max_value = values[0][0]
-        max_num = values[0][1]
-
-        for value, number in values:
-            if value > max_value:
-                max_value = value
-                max_num = number
-
-        # добавляем суффикс _номер словаря
-        result[f"{key}_{max_num}"] = max_value
+        result[f"{key}_{idx}"] = value
 
 print(result)
+
