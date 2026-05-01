@@ -1,43 +1,32 @@
+import random
 
-import random #импортируем дополнительный пакет
+list = []
 
-mylist = [] #создаем пустой список mylist
-x = 0       #создаем переменную х, устанавливаем ее значение равное 0
+for _ in range(100):
+    a = random.randint(0, 1000)
+    list.append(a)
 
-#создаем переменную num, значение случайное от 0 до 1000, значение вставляем в список mylist, повторяем 100 раз (пока х не достигнет 100)
-while x < 100:
-    num = random.randint(0, 1000)
-    mylist.append(num)
-    x = x + 1
+new_list = list[:]
 
-arr = mylist[:] #создали копию списка mylist, чтобы не изменять его
-result = [] #создаем пустой список result
+sorted_list = []
 
-while  arr: #пока список возвращает true, то есть пока он не пуст, будут выполняться все нижеслед. операции
-    m = min(arr) #создали переменную m, присвоили ей значение равное минимальной записи в списке
-    i = arr.index(m) #создали переменную i, присвоили ей значение равное индексу минимальной записи в списке
-    val = arr.pop(i) #создали переменную val, присвоили ей значение равное значению мин.записи в списке
-    result.append(val) #переменную val добавляем в список result
+while new_list:
+    m = min(new_list)
+    i = new_list.index(m)
+    a = new_list.pop(i)
+    sorted_list.append(a)
 
-evens = []
-odds = []
-# создаем список для четных и нечетных чисел
+chet = []
+nechet = []
 
-
-for num in result:
-    if num % 2 == 0:
-        evens.append(num)
+for x in sorted_list:
+    if x % 2 == 0:
+        chet.append(x)
     else:
-        odds.append(num)
-#распределяем четные и нечетные числа в соотв. список
+        nechet.append(x)
 
-avg_even = sum(evens) / len(evens)
-avg_odd = sum(odds) / len(odds)
-# вычисляем среднее
+avg_chet = sum(chet) / len(chet)
+avg_nechet = sum(nechet) / len(nechet)
 
-print("Even average:", avg_even)
-print("Odd average:", avg_odd)
-
-
-
-
+print("Среднее четных = ", avg_chet)
+print("Среднее нечетных = ", avg_nechet)
