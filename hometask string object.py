@@ -14,10 +14,9 @@ a =  """tHis iz your homeWork, copy these Text to variable.
 
 
 
-
 b = a.lower()
 c = b.replace("iz", "is")
-d = c.split(".")
+d = c.split('.')
 d = [s.strip() for s in d]
 
 last_words = []
@@ -27,8 +26,17 @@ for s in d:
         last_words.append(words[-1])
 
 new_sentence = " ".join(last_words) + "."
-result = c + " " + new_sentence
-count = sum(1 for ch in result if ch.isspace())
+
+text_clean = ". ".join(d)
+
+result = text_clean + ". " + new_sentence
+
+count = 0
+for ch in result:
+    if ch.isspace():
+        count += 1
+
 print(count)
 
 print(result)
+
