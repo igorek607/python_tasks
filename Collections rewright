@@ -1,0 +1,160 @@
+import random
+
+
+def generate_dicts():
+    string = "abcdefg"
+
+    result = []
+
+    for _ in range(random.randint(2, 10)):
+        keys = random.sample(
+            string,
+            random.randint(0, len(string))
+        )
+
+        result.append({
+            key: random.randint(0, 100)
+            for key in keys
+        })
+
+    return result
+
+
+def build_result(dicts):
+    occurrences = {}
+    max_values = {}
+
+    for idx, dictionary in enumerate(dicts, start=1):
+
+        for key, value in dictionary.items():
+
+            occurrences[key] = occurrences.get(key, 0) + 1
+
+            if key not in max_values or value > max_values[key][0]:
+                max_values[key] = (value, idx)
+
+    result = {}
+
+    for key, (value, idx) in max_values.items():
+
+        result_key = (
+            key
+            if occurrences[key] == 1
+            else f"{key}_{idx}"
+        )
+
+        result[result_key] = value
+
+    return result
+
+
+def main():
+    dicts = generate_dicts()
+
+    print(dicts)
+
+    result = build_result(dicts)
+
+    print(result)
+
+
+if __name__ == "__main__":
+    main()
+
+
+TEXT = """tHis iz your homeWork, copy these Text to variable.
+
+
+
+ You NEED TO normalize it fROM letter CASEs point oF View. also, create one MORE senTENCE witH LAST WoRDS of each existING SENtence and add it to the END OF this Paragraph.
+
+
+
+ it iZ misspeLLing here. fix“iZ” with correct “is”, but ONLY when it Iz a mistAKE.
+
+
+
+ last iz TO calculate nuMber OF Whitespace characteRS in this Tex. caREFULL, not only Spaces, but ALL whitespaces. I got 87."""
+
+
+def normalize_text(text):
+    """
+    Normalize text case and fix misspelling.
+    """
+    text = text.lower()
+
+    # replace only standalone 'iz'
+    words = text.split()
+
+    fixed_words = [
+        "is" if word == "iz" else word
+        for word in words
+    ]
+
+    return " ".join(fixed_words)
+
+
+def split_sentences(text):
+    """
+    Split text into cleaned sentences.
+    """
+    return [
+        sentence.strip()
+        for sentence in text.split(".")
+        if sentence.strip()
+    ]
+
+
+def build_last_words_sentence(sentences):
+    """
+    Build sentence from last words.
+    """
+    last_words = [
+        sentence.split()[-1]
+        for sentence in sentences
+    ]
+
+    return " ".join(last_words) + "."
+
+
+def count_whitespaces(text):
+    """
+    Count all whitespace characters.
+    """
+    return sum(
+        1
+        for char in text
+        if char.isspace()
+    )
+
+
+def build_result(text):
+    normalized_text = normalize_text(text)
+
+    sentences = split_sentences(normalized_text)
+
+    last_words_sentence = build_last_words_sentence(sentences)
+
+    cleaned_text = ". ".join(sentences) + "."
+
+    final_text = (
+        cleaned_text
+        + " "
+        + last_words_sentence
+    )
+
+    whitespace_count = count_whitespaces(final_text)
+
+    return final_text, whitespace_count
+
+
+def main():
+    result_text, whitespace_count = build_result(TEXT)
+
+    print(result_text)
+
+    print("\nWhitespace count:", whitespace_count)
+
+
+if __name__ == "__main__":
+    main()
