@@ -1,0 +1,26 @@
+import os
+
+def read_records():
+    with open("file.txt", "r", encoding="utf-8") as file:
+        for line in file:
+            parts = line.strip().split(";")
+            record_type = parts[0]
+            text = parts[1]
+
+            if record_type == "News":
+                city = parts[2]
+                news = News(text, city)
+                news.publish()
+
+            elif record_type == "PrivateAd":
+                expiration_date = parts[2]
+                private_ad = PrivateAd(text, expiration_date)
+                private_ad.publish()
+
+            elif record_type == "Event":
+                event_date = parts[2]
+                event = Event(text, event_date)
+                event.publish()
+
+    if os.path.exists("file.txt"):
+        os.remove("file.txt")
