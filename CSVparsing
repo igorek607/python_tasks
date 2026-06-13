@@ -1,0 +1,79 @@
+from collections import Counter
+
+text = """
+Private Ad ------------------
+Prodam dom
+Expiration date: 22/11/2027
+Days left: 546
+
+Private Ad ------------------
+Отдам щенка
+Expiration date: 22/10/2030
+Days left: 1611
+
+
+Private Ad ------------------
+Куплю квартиру
+Expiration date: 06/07/2027
+Days left: 9
+
+"""
+
+# =========================
+# 1. WORD COUNT
+# =========================
+
+text_lower = text.lower()
+
+words = []
+current_word = ""
+
+for ch in text_lower:
+    if ch.isalpha():          # буква → добавляем в слово
+        current_word += ch
+    else:                      # не буква → слово закончилось
+        if current_word != "":
+            words.append(current_word)
+            current_word = ""
+
+# если последнее слово осталось
+if current_word != "":
+    words.append(current_word)
+
+word_counts = Counter(words)
+
+with open("word-count.csv", "w", encoding="utf-8") as f:
+    f.write("slovo,4islo\n")
+    for word, count in word_counts.items():
+        f.write(f"{word},{count}\n")
+
+# =========================
+# 2. LETTER COUNT
+# =========================
+
+letters = []
+uppercase_count = {}
+
+for ch in text:
+    if ch.isalpha():
+        lower_ch = ch.lower()
+        letters.append(lower_ch)
+
+        if ch.isupper():
+            uppercase_count[lower_ch] = uppercase_count.get(lower_ch, 0) + 1
+
+letter_counts = Counter(letters)
+total_letters = len(letters)
+
+with open("letter-count.csv", "w", encoding="utf-8") as f:
+    f.write("letter,count_all,count_uppercase,percentage\n")
+
+    for letter in sorted(letter_counts):
+        count_all = letter_counts[letter]
+        count_upper = uppercase_count.get(letter, 0)
+        percentage = (count_all / total_letters) * 100
+
+        f.write(f"{letter},{count_all},{count_upper},{percentage:.2f}\n")
+
+print(letter_counts)
+print(total_letters)
