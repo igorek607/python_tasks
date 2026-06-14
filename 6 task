@@ -1,3 +1,113 @@
+from datetime import datetime
+
+class Record:
+
+    def __init__(self, text):
+        self.text = text
+
+    def save_to_file(self, content):
+        with open("records.txt", "a", encoding="utf-8") as file:
+            file.write(content + "\n\n")
+
+class News(Record):
+    def __init__(self, text, city):
+        super().__init__(text)
+        self.city = city
+
+    def publish(self):
+        current_date = datetime.now().strftime("%d/%m/%Y")
+
+        content = (
+            f"News ------------------\n"
+            f"{self.text}\n"
+            f"City: {self.city}\n"
+            f"Date: {current_date}"
+        )
+
+        self.save_to_file(content)
+
+class PrivateAd(Record):
+    def __init__(self, text, expiration_date):
+        super().__init__(text)
+        self.expiration_date = expiration_date
+
+    def publish(self):
+        today = datetime.now()
+        event = datetime.strptime(self.expiration_date, "%d/%m/%Y")
+
+        days_left = (event - today).days
+
+        content = (
+            f"Private Ad ------------------\n"
+            f"{self.text}\n"
+            f"Expiration date: {self.expiration_date}\n"
+            f"Days left: {days_left}"
+        )
+
+        self.save_to_file(content)
+
+
+class Event(Record):
+    def __init__(self, text, event_date):
+        super().__init__(text)
+        self.event_date = event_date
+
+    def publish(self):
+        today = datetime.now()
+        event = datetime.strptime(self.event_date, "%d/%m/%Y")
+
+        days_left = (event - today).days
+
+        content = (
+            f"Event ------------------\n"
+            f"{self.text}\n"
+            f"Event date: {self.event_date}\n"
+            f"Days left: {days_left}"
+        )
+
+        self.save_to_file(content)
+
+
+# предполагаем, что классы уже импортированы:
+# from classes import News, PrivateAd
+
+
+def main():
+    print("Choose record type:")
+    print("1 - News")
+    print("2 - Private Ad")
+    print("3 - Event")
+    choice = input("Make your choice: ")
+
+    if choice == "1":
+        text = input("Enter news text: ")
+        city = input("Enter city: ")
+
+        news = News(text, city)
+        news.publish()
+
+
+    elif choice == "2":
+        text = input("Enter ad text: ")
+        expiration_date = input("Enter expiration date (dd/mm/yyyy): ")
+
+        ad = PrivateAd(text, expiration_date)
+        ad.publish()
+
+    elif choice == "3":
+        text = input("Enter event name: ")
+        event_date = input("Enter event date (dd/mm/yyyy): ")
+
+        event = Event(text, event_date)
+        event.publish()
+
+    else:
+        print("Try again")
+
+if __name__ == "__main__":
+    main()
+
+
 import os
 
 def read_records():
