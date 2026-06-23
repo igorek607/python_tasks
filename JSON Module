@@ -1,0 +1,28 @@
+import json
+import os
+
+def read_records(file_path=None):
+    if file_path is None:
+        file_path = "records.json"
+    with open(file_path, "r", encoding="utf-8") as file:
+        records = json.load(file)
+        for record in records:
+            record_type = record["type"]
+            text = record["text"]
+
+            if record_type.lower() == "news":
+                city = record["city"]
+                news = News(text, city)
+                news.publish()
+
+            elif record_type.lower() == "privatead":
+                expiration_date = record["expiration_date"]
+                private_ad = PrivateAd(text, expiration_date)
+                private_ad.publish()
+
+            elif record_type.lower() == "event":
+                event_date = record["event_date"]
+                event = Event(text, event_date)
+                event.publish()
+
+        os.remove(file_path)
